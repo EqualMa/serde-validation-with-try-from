@@ -16,25 +16,29 @@ pub struct ValueRange {
     max: i32,
 }
 
-impl TryFrom<ValueRangeUnchecked> for ValueRange {
-    type Error = String; // Use String as error type just for simplicity
-
-    fn try_from(value: ValueRangeUnchecked) -> Result<Self, Self::Error> {
-        let ValueRangeUnchecked { min, max } = value;
+impl ValueRange {
+    pub fn try_new(min: i32, max: i32) -> Result<Self, String> {
         if min <= max {
             Ok(ValueRange { min, max })
         } else {
             Err("Invalid ValueRange".to_string())
         }
     }
-}
 
-impl ValueRange {
     pub fn min(&self) -> i32 {
         self.min
     }
     pub fn max(&self) -> i32 {
         self.max
+    }
+}
+
+impl TryFrom<ValueRangeUnchecked> for ValueRange {
+    type Error = String; // Use String as error type just for simplicity
+
+    fn try_from(value: ValueRangeUnchecked) -> Result<Self, Self::Error> {
+        let ValueRangeUnchecked { min, max } = value;
+        Self::try_new(min, max)
     }
 }
 
